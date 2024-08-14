@@ -1,32 +1,33 @@
-// src/screens/HomeScreen.js
-import React, { useEffect } from 'react';
-import { View } from 'react-native';
-import { Button, Appbar } from 'react-native-paper';
+import { View } from "react-native";
+import { Paragraph, Surface } from "react-native-paper";
+import { useEffect } from "react";
+import { db } from "../config/firebase";
+import styles from "../config/styles";
+import { collection, getDocs } from "firebase/firestore";
 
-function HomeScreen({ navigation }) {
+export default function HomeScreen() {
+  useEffect(() => {
+    // aqui
+    const buscaDados = async () => {
+      // aqui eu referencio a coleção usuários dentro de colRef
+      const colRef = collection(db, "usuarios");
+      // buscar todos os resultados de colRef que é a coleção usuários
+      const querySnapshot = await getDocs(colRef); // faz esperar a busca dos dados
+      // para cada documento dentro de querySnapshot, eu imprimo o id e os dados
+      querySnapshot.forEach((doc) => {
+        console.log(doc.id, " => ", doc.data());
+      });
+    };
+    // fecha aqui
+    buscaDados(); // não esqueça de chamar a função
 
-  useEffect(()=>{
-    const colRef = collection(db, "usuarios");
-    const querySnapshot = (colRef);
-    querySnapshot.forEach(
-      (doc)=> {
-        console.log(doc)
-      }
-    )
-  },[]);
+  }, []);
 
   return (
-    <>
-      <Appbar.Header>
-        <Appbar.Content title="Home" />
-      </Appbar.Header>
+    <Surface style={styles.container}>
       <View>
-        <Button mode="contained" onPress={() => navigation.navigate('Details')}>
-          Go to Details
-        </Button>
+        <Paragraph>Bem vindx</Paragraph>
       </View>
-    </>
+    </Surface>
   );
 }
-
-export default HomeScreen;
